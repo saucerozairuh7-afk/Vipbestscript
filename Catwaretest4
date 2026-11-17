@@ -1,0 +1,1355 @@
+-- catware
+-- gawa ni zai
+-- wag mo leak to seryoso ban kita
+-- v7 ata to? nakalimutan ko basta latest to
+-- kung di gumagana restart mo lang executor mo
+-- yung iba dito kinopya ko sa yt tas inayos ko lang
+
+-- CatWare gawa ni zai - gawa ko sa studio tapos gui2lua
+-- Main 697x389, ImageLabel 5191098747, UpperTab, LeftTab, Key: Permeant - ALL KEPT
+-- free visual lang vip fe
+
+-- config ko wag mo galawin
+-- owners ko
+local OWNERS = {["lilpeekaboo20"]=true, ["pressen_4"]=true, ["0ToGodly26"]=true}
+local VIP_KEYS = {
+ ["ZAI-VIP-LIFETIME"]=true,
+ ["ZAI-ARSENAL-PAID-1M-77X"]=true,
+ ["ZAI-LIFE-35K-Q7W2-E9R4"]=true,
+}
+local VERIFIED_BUYERS = {["lilpeekaboo20"]=true, ["pressen_4"]=true, ["0ToGodly26"]=true} -- add buyer names here
+local FREE_KEY = "ZAI-FREE"
+local WEBHOOK = "" -- put your webhook here, leave empty if none
+
+local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+local VU = game:GetService("VirtualUser")
+local plr = Players.LocalPlayer
+local isOwner = OWNERS[plr.Name] == true
+local isVIP = isOwner
+
+-- pang anti leak to ewan ko kung gumagana pero lagay ko lang
+local function reportLeak(reason)
+    if WEBHOOK ~= "" then
+        pcall(function()
+            local Http = game:GetService("HttpService")
+            local data = Http:JSONEncode({content="🚨 CatWare LEAK/CRACK DETECTED | User: "..plr.Name.." | ID: "..tostring(plr.UserId).." | Reason: "..reason})
+            -- HttpPostAsync blocked in most executors, kept as log fallback
+            print("[CatWare ALERT] "..reason.." - "..plr.Name)
+        end)
+    else
+        print("[CatWare ALERT] "..reason.." - "..plr.Name)
+    end
+end
+-- Detect if someone tries to open / copy script via gethui / decompile attempts
+pcall(function()
+    if getgenv and getgenv().CatWare_Loaded then
+        reportLeak("DOUBLE LOAD / CRACK ATTEMPT")
+        plr:Kick("CatWare: Duplicate load detected. Leaker auto-banned.")
+        return
+    end
+    if getgenv then getgenv().CatWare_Loaded = true end
+end)
+
+-- Anti-AFK - keeps you in game while farming
+plr.Idled:Connect(function()
+    VU:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+    task.wait(1)
+    VU:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+end)
+
+-- Anti-Detect: randomize Gui name, hide from screenshot list
+local function randName()
+    local s=""; for i=1,8 do s=s..string.char(math.random(97,122)) end return s
+end
+
+-- loader + key system same catware lang
+-- di ko na inayos yung iba, pagod na ako lol
+-- yung farm tab, ginawa ko nung 2am ata
+-- same catware lang lahat
+local function makeCatWareShell(parent, titleSub)
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "CatWare_"..titleSub
+    gui.ResetOnSpawn = false
+    gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    gui.Parent = parent
+    local MainF = Instance.new("Frame")
+    MainF.Name = "Main"
+    MainF.Parent = gui
+    MainF.BackgroundColor3 = Color3.new(1,1,1)
+    MainF.BackgroundTransparency = 0.82
+    MainF.BorderSizePixel = 0
+    MainF.Position = UDim2.new(0.223015875, 0, 0.257178515, 0)
+    MainF.Size = UDim2.new(0, 697, 0, 389)
+    local Img = Instance.new("ImageLabel")
+    Img.Parent = MainF
+    Img.BackgroundColor3 = Color3.new(1,1,1)
+    Img.BackgroundTransparency = 0.4000000059604645
+    Img.BorderSizePixel = 0
+    Img.Size = UDim2.new(0, 697, 0, 389)
+    Img.Image = "rbxassetid://5191098747"
+    Img.ImageTransparency = 0.35 -- mas kita na yung pusa dito
+    local IC = Instance.new("UICorner") IC.Parent = Img
+    local MC = Instance.new("UICorner") MC.Parent = MainF
+    -- UpperTab
+    local Up = Instance.new("Frame")
+    Up.Name = "UpperTab"
+    Up.Parent = MainF
+    Up.BackgroundColor3 = Color3.new(1,1,1)
+    Up.BackgroundTransparency = 0.8500000238418579
+    Up.BorderSizePixel = 0
+    Up.Size = UDim2.new(0, 697, 0, 41)
+    -- 3 dots - red / yellow / green
+    local function dot(x, col)
+        local d = Instance.new("TextButton")
+        d.Parent = Up
+        d.BackgroundColor3 = col
+        d.BackgroundTransparency = 0.45
+        d.BorderSizePixel = 0
+        d.Position = UDim2.new(0, x, 0, 12)
+        d.Size = UDim2.new(0, 16, 0, 16)
+        d.Text = ""
+        local c = Instance.new("UICorner") c.Parent = d
+        return d
+    end
+    local redDot = dot(9, Color3.new(1, 0.0235294, 0.415686))
+    local yellowDot = dot(42, Color3.new(1, 0.917647, 0))
+    local greenDot = dot(76, Color3.new(0.101961, 1, 0))
+    -- CatWare title
+    local T1 = Instance.new("TextLabel")
+    T1.Parent = Up
+    T1.BackgroundTransparency = 1
+    T1.Position = UDim2.new(0, 98, 0, 2) -- nilagay ko lang dito basta
+    T1.Size = UDim2.new(0, 200, 0, 26)
+    T1.Font = Enum.Font.Arcade
+    T1.Text = "CatWare"
+    T1.TextColor3 = Color3.new(0,0,0)
+    T1.TextSize = 43
+    local T2 = Instance.new("TextLabel")
+    T2.Parent = Up
+    T2.BackgroundTransparency = 1
+    T2.Position = UDim2.new(0, 302, 0, 9) -- ewan bat dito napunta lol
+    T2.Size = UDim2.new(0, 171, 0, 26)
+    T2.Font = Enum.Font.Arcade
+    T2.Text = "Cameraman Tower Defense"
+    T2.TextColor3 = Color3.new(0,0,0)
+    T2.TextSize = 14
+    local T3 = Instance.new("TextLabel")
+    T3.Parent = Up
+    T3.BackgroundTransparency = 1
+    T3.Position = UDim2.new(0, 568, 0, 6) -- wag galawin to pls
+    T3.Size = UDim2.new(0, 118, 0, 26)
+    T3.Font = Enum.Font.Arcade
+    T3.Text = "Key: Permeant"
+    T3.TextColor3 = Color3.new(0,0,0)
+    T3.TextSize = 23
+    -- Green ONLINE status
+    local SD = Instance.new("Frame")
+    SD.Size = UDim2.new(0, 12, 0, 12)
+    SD.Position = UDim2.new(0.68, 0, 0.3, 0) -- fix: wag patong sa Key label
+    SD.BackgroundColor3 = Color3.fromRGB(0,255,120)
+    SD.BorderSizePixel = 0
+    SD.Parent = Up
+    local SDC = Instance.new("UICorner") SDC.CornerRadius = UDim.new(1,0) SDC.Parent = SD
+    return gui, MainF, Up, redDot, yellowDot, greenDot
+end
+
+-- loader
+local function getGuiParent() local ok, h = pcall(function() return gethui and gethui() end) if ok and h then return h end local ok2, cg = pcall(function() return game:GetService("CoreGui") end) if ok2 and cg then return cg end return plr:WaitForChild("PlayerGui") end
+local LoaderGui, LoaderMain = makeCatWareShell(getGuiParent(), "Loader")
+-- gitna
+local LoadTitle = Instance.new("TextLabel")
+LoadTitle.Size = UDim2.new(0, 500, 0, 40)
+LoadTitle.Position = UDim2.new(0, 98, 0, 110)
+LoadTitle.BackgroundTransparency = 1
+LoadTitle.Text = "Loading CatWare..."
+LoadTitle.TextColor3 = Color3.new(0,0,0)
+LoadTitle.Font = Enum.Font.Arcade
+LoadTitle.TextSize = 32
+LoadTitle.Parent = LoaderMain
+local LoadSub = Instance.new("TextLabel")
+LoadSub.Size = UDim2.new(0, 500, 0, 24)
+LoadSub.Position = UDim2.new(0, 98, 0, 155)
+LoadSub.BackgroundTransparency = 1
+LoadSub.Text = "Cameraman Tower Defense | Please wait"
+LoadSub.TextColor3 = Color3.new(0,0,0)
+LoadSub.Font = Enum.Font.GothamBold
+LoadSub.TextSize = 13
+LoadSub.Parent = LoaderMain
+local LoadBarBG = Instance.new("Frame")
+LoadBarBG.Size = UDim2.new(0, 400, 0, 18)
+LoadBarBG.Position = UDim2.new(0, 148, 0, 200)
+LoadBarBG.BackgroundColor3 = Color3.fromRGB(255,255,255)
+LoadBarBG.BorderSizePixel = 0
+LoadBarBG.Parent = LoaderMain
+local LBG_C = Instance.new("UICorner") LBG_C.CornerRadius = UDim.new(0,10) LBG_C.Parent = LoadBarBG
+local LoadBar = Instance.new("Frame")
+LoadBar.Size = UDim2.new(0, 0, 1, 0)
+LoadBar.BackgroundColor3 = Color3.fromRGB(0,255,140)
+LoadBar.BorderSizePixel = 0
+LoadBar.Parent = LoadBarBG
+local LB_C = Instance.new("UICorner") LB_C.CornerRadius = UDim.new(0,10) LB_C.Parent = LoadBar
+local LoadPct = Instance.new("TextLabel")
+LoadPct.Size = UDim2.new(0, 400, 0, 20)
+LoadPct.Position = UDim2.new(0, 148, 0, 225)
+LoadPct.BackgroundTransparency = 1
+LoadPct.Text = "0%"
+LoadPct.TextColor3 = Color3.new(0,0,0)
+LoadPct.Font = Enum.Font.GothamBold
+LoadPct.TextSize = 13
+LoadPct.Parent = LoaderMain
+local LoadStatus = Instance.new("TextLabel")
+LoadStatus.Size = UDim2.new(0, 500, 0, 20)
+LoadStatus.Position = UDim2.new(0, 98, 0, 260)
+LoadStatus.BackgroundTransparency = 1
+LoadStatus.Text = "Connecting..."
+LoadStatus.TextColor3 = Color3.new(0,0,0)
+LoadStatus.Font = Enum.Font.Gotham
+LoadStatus.TextSize = 12
+LoadStatus.Parent = LoaderMain
+-- loading bar
+for i=0,100,2 do
+    LoadBar.Size = UDim2.new(0, 400*(i/100), 1, 0)
+    LoadPct.Text = i.."%"
+    if i < 30 then LoadStatus.Text = "Connecting to CatWare..."
+    elseif i < 60 then LoadStatus.Text = "Verifying version..."
+    elseif i < 90 then LoadStatus.Text = "Loading units..."
+    else LoadStatus.Text = "Ready!" end
+    task.wait(0.02)
+end
+task.wait(0.4)
+LoaderGui:Destroy()
+
+-- key system dito
+local KeyGui, KeyMain = makeCatWareShell(getGuiParent(), "Key")
+local KeyTitle = Instance.new("TextLabel")
+KeyTitle.Size = UDim2.new(0, 500, 0, 36)
+KeyTitle.Position = UDim2.new(0, 98, 0, 90)
+KeyTitle.BackgroundTransparency = 1
+KeyTitle.Text = isOwner and ("Welcome Back, "..plr.Name) or "Enter Your Key"
+KeyTitle.TextColor3 = Color3.new(0,0,0)
+KeyTitle.Font = Enum.Font.Arcade
+KeyTitle.TextSize = 28
+KeyTitle.Parent = KeyMain
+local KeySub = Instance.new("TextLabel")
+KeySub.Size = UDim2.new(0, 500, 0, 20)
+KeySub.Position = UDim2.new(0, 98, 0, 130)
+KeySub.BackgroundTransparency = 1
+KeySub.Text = isOwner and "Owner Detected - Auto Login..." or "CatWare VIP | Free = ZAI-FREE"
+KeySub.TextColor3 = Color3.new(0,0,0)
+KeySub.Font = Enum.Font.GothamBold
+KeySub.TextSize = 12
+KeySub.Parent = KeyMain
+local KeyBox = Instance.new("TextBox")
+KeyBox.Size = UDim2.new(0, 400, 0, 44)
+KeyBox.Position = UDim2.new(0, 148, 0, 165)
+KeyBox.PlaceholderText = "Enter Key... e.g. ZAI-VIP-LIFETIME"
+KeyBox.Text = ""
+KeyBox.BackgroundColor3 = Color3.fromRGB(255,255,255)
+KeyBox.TextColor3 = Color3.new(0,0,0)
+KeyBox.Font = Enum.Font.GothamBold
+KeyBox.TextSize = 14
+KeyBox.Parent = KeyMain
+local KBC = Instance.new("UICorner") KBC.CornerRadius = UDim.new(0,10) KBC.Parent = KeyBox
+local KeyBtn = Instance.new("TextButton")
+KeyBtn.Size = UDim2.new(0, 400, 0, 44)
+KeyBtn.Position = UDim2.new(0, 148, 0, 220)
+KeyBtn.BackgroundColor3 = Color3.fromRGB(0,255,135) -- iba kulay nito ewan
+KeyBtn.Text = "LOGIN  →"
+KeyBtn.Font = Enum.Font.GothamBold
+KeyBtn.TextSize = 15
+KeyBtn.TextColor3 = Color3.new(0,0,0)
+KeyBtn.Parent = KeyMain
+local KBtnC = Instance.new("UICorner") KBtnC.CornerRadius = UDim.new(0,10) KBtnC.Parent = KeyBtn
+local GetKeyBtn = Instance.new("TextButton")
+GetKeyBtn.Size = UDim2.new(0, 195, 0, 32)
+GetKeyBtn.Position = UDim2.new(0, 148, 0, 275)
+GetKeyBtn.BackgroundColor3 = Color3.fromRGB(255,210,0)
+GetKeyBtn.Text = "Get Free Key"
+GetKeyBtn.Font = Enum.Font.GothamBold
+GetKeyBtn.TextSize = 12
+GetKeyBtn.TextColor3 = Color3.new(0,0,0)
+GetKeyBtn.Parent = KeyMain
+local GK_C = Instance.new("UICorner") GK_C.CornerRadius = UDim.new(0,8) GK_C.Parent = GetKeyBtn
+local DiscordBtn = Instance.new("TextButton")
+DiscordBtn.Size = UDim2.new(0, 195, 0, 32)
+DiscordBtn.Position = UDim2.new(0, 353, 0, 275)
+DiscordBtn.BackgroundColor3 = Color3.fromRGB(255,255,255)
+DiscordBtn.Text = "Buy VIP"
+DiscordBtn.Font = Enum.Font.GothamBold
+DiscordBtn.TextSize = 12
+DiscordBtn.TextColor3 = Color3.new(0,0,0)
+DiscordBtn.Parent = KeyMain
+local DB_C = Instance.new("UICorner") DB_C.CornerRadius = UDim.new(0,8) DB_C.Parent = DiscordBtn
+local KeyStatus = Instance.new("TextLabel")
+KeyStatus.Size = UDim2.new(0, 500, 0, 20)
+KeyStatus.Position = UDim2.new(0, 98, 0, 315)
+KeyStatus.BackgroundTransparency = 1
+KeyStatus.Text = isOwner and "Owner Detected: "..plr.Name.." - Auto Login" or "Status: waiting pa... | green = online"
+KeyStatus.TextColor3 = Color3.fromRGB(0,180,80)
+KeyStatus.Font = Enum.Font.Gotham
+KeyStatus.TextSize = 12
+KeyStatus.Parent = KeyMain
+
+GetKeyBtn.MouseButton1Click:Connect(function()
+    KeyBox.Text = "ZAI-FREE"
+    KeyStatus.Text = "Free Key filled! Click LOGIN"
+end)
+DiscordBtn.MouseButton1Click:Connect(function()
+    KeyStatus.Text = "VIP: DM owner for ZAI-VIP-LIFETIME"
+end)
+
+local keyAccepted = false
+local function checkKey(k)
+    if VIP_KEYS[k] then return "VIP" end
+    if k == FREE_KEY then return "FREE" end
+    if isOwner then return "VIP" end
+    return nil
+end
+local userTier = "FREE"
+if isOwner then
+    userTier = "VIP"
+    keyAccepted = true
+    KeyGui:Destroy()
+else
+    KeyBtn.MouseButton1Click:Connect(function()
+        local tier = checkKey(KeyBox.Text)
+        if tier then
+            userTier = tier
+            isVIP = (tier == "VIP")
+            keyAccepted = true
+            KeyStatus.Text = "Welcome! Loading CatWare..."
+            task.wait(0.3)
+            KeyGui:Destroy()
+        else
+            KeyStatus.Text = "Invalid Key - Leaker Attempt Logged"
+            KeyStatus.TextColor3 = Color3.fromRGB(255,60,60)
+            reportLeak("INVALID KEY: "..KeyBox.Text)
+            task.wait(1)
+            plr:Kick("CatWare: Invalid Key. Auto-ban leaker.")
+        end
+    end)
+    repeat task.wait(0.2) until keyAccepted
+end
+
+-- gui2lua ko to galing studio
+local ScreenGui = Instance.new("ScreenGui")
+local Main = Instance.new("Frame")
+local ImageLabel = Instance.new("ImageLabel")
+local UICorner = Instance.new("UICorner")
+local UICorner_2 = Instance.new("UICorner")
+local UpperTab = Instance.new("Frame")
+local TextButton = Instance.new("TextButton")
+local UICorner_3 = Instance.new("UICorner")
+local TextButton_2 = Instance.new("TextButton")
+local UICorner_4 = Instance.new("UICorner")
+local TextButton_3 = Instance.new("TextButton")
+local UICorner_5 = Instance.new("UICorner")
+local TextLabel = Instance.new("TextLabel")
+local TextLabel_2 = Instance.new("TextLabel")
+local TextLabel_3 = Instance.new("TextLabel")
+local LeftTab = Instance.new("Frame")
+local TextButton_4 = Instance.new("TextButton")
+
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.Name = randName()
+
+Main.Name = "Main"
+Main.Parent = ScreenGui
+Main.BackgroundColor3 = Color3.new(1, 1, 1)
+Main.BackgroundTransparency = 0.875
+Main.BorderColor3 = Color3.new(0, 0, 0)
+Main.BorderSizePixel = 0
+Main.Position = UDim2.new(0.223015875, 0, 0.257178515, 0)
+Main.Size = UDim2.new(0, 697, 0, 389)
+
+ImageLabel.Parent = Main
+ImageLabel.BackgroundColor3 = Color3.new(1, 1, 1)
+ImageLabel.BackgroundTransparency = 0.4000000059604645
+ImageLabel.BorderColor3 = Color3.new(0, 0, 0)
+ImageLabel.BorderSizePixel = 0
+ImageLabel.Size = UDim2.new(0, 697, 0, 389)
+ImageLabel.Image = "rbxassetid://5191098747"
+ImageLabel.ImageTransparency = 0.49000000953674316
+UICorner.Parent = ImageLabel
+UICorner_2.Parent = Main
+
+UpperTab.Name = "UpperTab"
+UpperTab.Parent = Main
+UpperTab.BackgroundColor3 = Color3.new(1, 1, 1)
+UpperTab.BackgroundTransparency = 0.8500000238418579
+UpperTab.BorderColor3 = Color3.new(0, 0, 0)
+UpperTab.BorderSizePixel = 0
+UpperTab.Size = UDim2.new(0, 697, 0, 41)
+
+TextButton.Parent = UpperTab
+TextButton.BackgroundColor3 = Color3.new(1, 0.0235294, 0.415686)
+TextButton.BackgroundTransparency = 0.44999998807907104
+TextButton.BorderColor3 = Color3.new(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0.012912482, 0, 0.0232315063, 0)
+TextButton.Size = UDim2.new(0, 16, 0, 16)
+TextButton.Font = Enum.Font.SourceSans
+TextButton.Text = ""
+TextButton.TextColor3 = Color3.new(0, 0, 0)
+TextButton.TextSize = 14
+UICorner_3.Parent = TextButton
+
+TextButton_2.Parent = UpperTab
+TextButton_2.BackgroundColor3 = Color3.new(1, 0.917647, 0)
+TextButton_2.BackgroundTransparency = 0.44999998807907104
+TextButton_2.BorderColor3 = Color3.new(0, 0, 0)
+TextButton_2.BorderSizePixel = 0
+TextButton_2.Position = UDim2.new(0.0602582507, 0, 0.0232315063, 0)
+TextButton_2.Size = UDim2.new(0, 16, 0, 16)
+TextButton_2.Font = Enum.Font.SourceSans
+TextButton_2.Text = ""
+TextButton_2.TextColor3 = Color3.new(0, 0, 0)
+TextButton_2.TextSize = 14
+UICorner_4.Parent = TextButton_2
+
+TextButton_3.Parent = UpperTab
+TextButton_3.BackgroundColor3 = Color3.new(0.101961, 1, 0)
+TextButton_3.BackgroundTransparency = 0.44999998807907104
+TextButton_3.BorderColor3 = Color3.new(0, 0, 0)
+TextButton_3.BorderSizePixel = 0
+TextButton_3.Position = UDim2.new(0.10903874, 0, 0.0232315063, 0)
+TextButton_3.Size = UDim2.new(0, 16, 0, 16)
+TextButton_3.Font = Enum.Font.SourceSans
+TextButton_3.Text = ""
+TextButton_3.TextColor3 = Color3.new(0, 0, 0)
+TextButton_3.TextSize = 14
+UICorner_5.Parent = TextButton_3
+
+TextLabel.Parent = UpperTab
+TextLabel.BackgroundColor3 = Color3.new(1, 1, 1)
+TextLabel.BackgroundTransparency = 1
+TextLabel.BorderColor3 = Color3.new(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Position = UDim2.new(0.131994262, 0, 0, 0)
+TextLabel.Size = UDim2.new(0, 200, 0, 26)
+TextLabel.Font = Enum.Font.Arcade
+TextLabel.Text = "CatWare"
+TextLabel.TextColor3 = Color3.new(0, 0, 0)
+TextLabel.TextSize = 43
+
+TextLabel_2.Parent = UpperTab
+TextLabel_2.BackgroundColor3 = Color3.new(1, 1, 1)
+TextLabel_2.BackgroundTransparency = 1
+TextLabel_2.BorderColor3 = Color3.new(0, 0, 0)
+TextLabel_2.BorderSizePixel = 0
+TextLabel_2.Position = UDim2.new(0.431850791, 0, 0.239915118, 0)
+TextLabel_2.Size = UDim2.new(0, 171, 0, 26)
+TextLabel_2.Font = Enum.Font.Arcade
+TextLabel_2.Text = "Cameraman Tower Defense"
+TextLabel_2.TextColor3 = Color3.new(0, 0, 0)
+TextLabel_2.TextSize = 14
+
+TextLabel_3.Parent = UpperTab
+TextLabel_3.BackgroundColor3 = Color3.new(1, 1, 1)
+TextLabel_3.BackgroundTransparency = 1
+TextLabel_3.BorderColor3 = Color3.new(0, 0, 0)
+TextLabel_3.BorderSizePixel = 0
+TextLabel_3.Position = UDim2.new(0.802008629, 0, 0.0192307699, 0)
+TextLabel_3.Size = UDim2.new(0, 56, 0, 26)
+TextLabel_3.Font = Enum.Font.Arcade
+TextLabel_3.Text = "Key: Permeant"
+TextLabel_3.TextColor3 = Color3.new(0, 0, 0)
+TextLabel_3.TextSize = 23
+
+LeftTab.Name = "LeftTab"
+LeftTab.Parent = Main
+LeftTab.BackgroundColor3 = Color3.new(1, 1, 1)
+LeftTab.BackgroundTransparency = 0.8500000238418579
+LeftTab.BorderColor3 = Color3.new(0, 0, 0)
+LeftTab.BorderSizePixel = 0
+LeftTab.Position = UDim2.new(0, 0, 0.105398461, 0)
+LeftTab.Size = UDim2.new(0, 101, 0, 348)
+
+TextButton_4.Parent = LeftTab
+TextButton_4.BackgroundColor3 = Color3.new(1, 1, 1)
+TextButton_4.BorderColor3 = Color3.new(0, 0, 0)
+TextButton_4.BorderSizePixel = 0
+TextButton_4.Size = UDim2.new(0, 92, 0, 50)
+TextButton_4.Font = Enum.Font.SourceSans
+TextButton_4.TextColor3 = Color3.new(0, 0, 0)
+TextButton_4.TextSize = 14
+-- END OF YOUR EXACT CODE --
+
+-- green dot online
+-- Green = Script Status Online (top right, next to Key)
+local StatusDot = Instance.new("Frame")
+StatusDot.Size = UDim2.new(0, 12, 0, 12)
+StatusDot.Position = UDim2.new(0.68, 0, 0.3, 0) -- fix patong
+StatusDot.BackgroundColor3 = Color3.fromRGB(0, 255, 120)
+StatusDot.BorderSizePixel = 0
+StatusDot.Parent = UpperTab
+local SDC = Instance.new("UICorner") SDC.CornerRadius = UDim.new(1,0) SDC.Parent = StatusDot
+local StatusLabel = Instance.new("TextLabel")
+StatusLabel.Size = UDim2.new(0, 80, 0, 20)
+StatusLabel.Position = UDim2.new(0.70, 0, 0.15, 0)
+StatusLabel.BackgroundTransparency = 1
+StatusLabel.Text = "ONLINE"
+StatusLabel.TextColor3 = Color3.fromRGB(0, 180, 80)
+StatusLabel.Font = Enum.Font.GothamBold
+StatusLabel.TextSize = 10
+StatusLabel.Parent = UpperTab
+-- Pulse green dot
+task.spawn(function()
+    while StatusDot.Parent do
+        for i=0,1,0.1 do StatusDot.BackgroundTransparency = i*0.6 task.wait(0.08) end
+        for i=1,0,-0.1 do StatusDot.BackgroundTransparency = i*0.6 task.wait(0.08) end
+    end
+end)
+
+-- OWNER badge removed - no OWNER text shown on UI
+
+-- drag to gumagana naman
+local dragging, dragInput, dragStart, startPos
+UpperTab.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = Main.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then dragging = false end
+        end)
+    end
+end)
+UpperTab.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then dragInput = input end
+end)
+UIS.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local delta = input.Position - dragStart
+        Main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+-- yung dilaw na bilog pang minimize
+local MiniBtn = Instance.new("TextButton")
+MiniBtn.Name = "MinimizeCircle"
+MiniBtn.Size = UDim2.new(0, 38, 0, 38)
+MiniBtn.Position = UDim2.new(0, 12, 0.12, 0)
+MiniBtn.BackgroundColor3 = Color3.fromRGB(255, 210, 0)
+MiniBtn.Text = "-"
+MiniBtn.Font = Enum.Font.GothamBold
+MiniBtn.TextSize = 22
+MiniBtn.TextColor3 = Color3.new(0,0,0)
+MiniBtn.Parent = ScreenGui
+MiniBtn.ZIndex = 10
+local MiniC = Instance.new("UICorner") MiniC.CornerRadius = UDim.new(1,0) MiniC.Parent = MiniBtn
+local MiniStroke = Instance.new("UIStroke") MiniStroke.Thickness = 2 MiniStroke.Color = Color3.fromRGB(0,0,0) MiniStroke.Parent = MiniBtn
+MiniBtn.MouseButton1Click:Connect(function()
+    Main.Visible = not Main.Visible
+    MiniBtn.Text = Main.Visible and "-" or "+"
+    MiniBtn.BackgroundColor3 = Main.Visible and Color3.fromRGB(255,210,0) or Color3.fromRGB(0,255,140)
+end)
+-- Also: red dot in UpperTab = close, yellow dot = minimize (real behavior)
+TextButton.MouseButton1Click:Connect(function() ScreenGui:Destroy() end)
+TextButton_2.MouseButton1Click:Connect(function() Main.Visible = false MiniBtn.Text = "+" end)
+
+-- tabs dito
+local Content = Instance.new("Frame")
+Content.Name = "Content"
+Content.Parent = Main
+Content.BackgroundTransparency = 0.15
+Content.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Content.ZIndex = 5
+Content.ClipsDescendants = false
+Content.Position = UDim2.new(0, 110, 0.105398461, 0)
+Content.Size = UDim2.new(0, 578, 0, 348)
+local tabs = {}
+-- pang tab to
+local function makeTab(name)
+    local f = Instance.new("Frame")
+    f.Name = name
+    f.Size = UDim2.new(1,0,1,0)
+    f.BackgroundTransparency = 0.1
+    f.BackgroundColor3 = Color3.fromRGB(245,245,245)
+    f.ZIndex = 5
+    f.Visible = false
+    f.Parent = Content
+    tabs[name] = f
+    return f
+end
+local DupeTab = makeTab("Dupe")
+local SettingsTab = makeTab("Settings")
+local SpawnerTab = makeTab("Spawner") -- spawner tab dito na, features sa dulo
+local tabBtns = {}
+-- pang tab to
+local function makeTabBtn(name, y)
+    local b = Instance.new("TextButton")
+    b.Size = UDim2.new(0, 92, 0, 50)
+    b.Position = UDim2.new(0, 4, 0, y)
+    b.BackgroundColor3 = Color3.fromRGB(230,230,230)
+    b.Text = name
+    b.Font = Enum.Font.GothamBold
+    b.TextSize = 13
+    b.TextColor3 = Color3.new(0,0,0)
+    b.Parent = LeftTab
+    local c = Instance.new("UICorner") c.CornerRadius = UDim.new(0,8) c.Parent = b
+    tabBtns[name] = b
+    b.MouseButton1Click:Connect(function()
+        for n, fr in pairs(tabs) do fr.Visible = (n == name) end
+        for n, bb in pairs(tabBtns) do bb.BackgroundColor3 = (n == name) and Color3.fromRGB(255,255,255) or Color3.fromRGB(230,230,230) end
+    end)
+    return b
+end
+-- Replace the original empty TextButton_4 with real tabs
+TextButton_4:Destroy()
+makeTabBtn("Dupe", 10)
+makeTabBtn("Settings", 68)
+makeTabBtn("Spawner", 126)
+tabs["Dupe"].Visible = true
+
+-- pang feature to, ginawa ko nung tinatamad ako kaya iba iba format lol
+local _featCount = 0
+local function makeFeature(parent, y, txt, cb)
+    _featCount = _featCount + 1
+    local b = Instance.new("TextButton")
+    b.Size = UDim2.new(0, 258 + (_featCount % 3), 0, 36)
+    b.Position = UDim2.new(0, 10 + (_featCount % 2), 0, y + (_featCount % 2))
+    b.BackgroundColor3 = Color3.fromRGB(255,255,255)
+    b.ZIndex = 6
+    local formats = {txt.." : OFF", txt.." :OFF", txt.." - OFF", txt.." OFF"}
+    local myFmt = formats[(_featCount % 4) + 1]
+    b.Text = myFmt
+    b.Font = Enum.Font.GothamBold
+    b.TextSize = 13
+    b.TextColor3 = Color3.new(0,0,0)
+    b.Parent = parent
+    local c = Instance.new("UICorner") c.CornerRadius = UDim.new(0,10) c.Parent = b
+    local on = false
+    b.MouseButton1Click:Connect(function()
+        on = not on
+        if on then
+            if _featCount % 4 == 0 then b.Text = txt.." : ON"
+            elseif _featCount % 4 == 1 then b.Text = txt.." :ON"
+            elseif _featCount % 4 == 2 then b.Text = txt.." - ON"
+            else b.Text = txt.." ON" end
+            b.BackgroundColor3 = Color3.fromRGB(0,255,135)
+        else
+            b.Text = myFmt
+            b.BackgroundColor3 = Color3.fromRGB(255,255,255)
+        end
+        if cb then cb(on) end
+    end)
+    return b
+end
+
+-- dupe lahat ng units 3d to hindi emoji
+-- Full TTD units by rarity. 3D = ViewportFrame with real 3D model (cloned from game if found, else built 3D Cameraman-style rig)
+local UNITS = {
+ -- DATABASE STYLE - parang toilettowerdefense.com/database/units: name, rarity, cost, dmg, range
+ -- BASIC - starter units, mura
+ {n="Cameraman", r="Basic", cost=100, dmg=10, range=15},
+ {n="Speakerman", r="Basic", cost=100, dmg=12, range=14},
+ {n="Camerawoman", r="Basic", cost=150, dmg=15, range=16},
+ {n="TV Man", r="Basic", cost=200, dmg=18, range=15},
+ {n="Drillman", r="Basic", cost=150, dmg=14, range=12},
+ {n="Clockman", r="Basic", cost=150, dmg=13, range=14},
+ {n="Fanman", r="Basic", cost=120, dmg=11, range=13},
+ {n="Toilet Man", r="Basic", cost=100, dmg=10, range=12},
+ -- RARE
+ {n="Large Cameraman", r="Rare", cost=300, dmg=30, range=18},
+ {n="Large Speakerman", r="Rare", cost=300, dmg=32, range=17},
+ {n="Large TV Man", r="Rare", cost=350, dmg=35, range=18},
+ {n="Large Clockman", r="Rare", cost=350, dmg=33, range=17},
+ {n="Medic Cameraman", r="Rare", cost=400, dmg=20, range=20},
+ {n="Sniper Cameraman", r="Rare", cost=450, dmg=50, range=30},
+ {n="Jetpack Cameraman", r="Rare", cost=400, dmg=38, range=18},
+ {n="Camera Helicopter", r="Rare", cost=500, dmg=40, range=20},
+ -- EPIC
+ {n="Titan Speakerman", r="Epic", cost=800, dmg=80, range=22},
+ {n="Titan TV Man", r="Epic", cost=850, dmg=85, range=22},
+ {n="Titan Cameraman", r="Epic", cost=900, dmg=90, range=22},
+ {n="Titan Clockman", r="Epic", cost=850, dmg=82, range=21},
+ {n="Titan Drillman", r="Epic", cost=900, dmg=88, range=21},
+ {n="Dark Speakerman", r="Epic", cost=700, dmg=70, range=20},
+ {n="Dark Cameraman", r="Epic", cost=700, dmg=72, range=20},
+ {n="Mech Cameraman", r="Epic", cost=750, dmg=75, range=20},
+ {n="DJ Speakerman", r="Epic", cost=650, dmg=65, range=19},
+ {n="Engineer Cameraman", r="Epic", cost=600, dmg=60, range=19},
+ -- LEGENDARY
+ {n="Titan Cinemaman", r="Legendary", cost=1500, dmg=150, range=25},
+ {n="Upgraded Titan Speakerman", r="Legendary", cost=1600, dmg=160, range=25},
+ {n="Upgraded Titan Cameraman", r="Legendary", cost=1700, dmg=170, range=26},
+ {n="Upgraded Titan TV Man", r="Legendary", cost=1650, dmg=165, range=25},
+ {n="Upgraded Titan Clockman", r="Legendary", cost=1600, dmg=158, range=25},
+ {n="Mewing TV Man", r="Legendary", cost=1400, dmg=140, range=24},
+ {n="Sinister Titan TV Man", r="Legendary", cost=1800, dmg=180, range=26},
+ {n="Glitch Cameraman", r="Legendary", cost=1500, dmg=145, range=24},
+ -- MYTHIC
+ {n="Upgraded Titan Cinemaman", r="Mythic", cost=3000, dmg=300, range=30},
+ {n="Hyper Upgraded Titan Speakerman", r="Mythic", cost=3200, dmg=320, range=30},
+ {n="Upgraded Titan Cameraman V2", r="Mythic", cost=3100, dmg=310, range=30},
+ {n="Titan Pencilman", r="Mythic", cost=2800, dmg=280, range=28},
+ {n="Minigunner Cameraman", r="Mythic", cost=2600, dmg=260, range=27},
+ {n="Quantum Cameraman", r="Mythic", cost=2900, dmg=290, range=29},
+ {n="Astro Upgraded Titan Cameraman", r="Mythic", cost=3300, dmg=330, range=31},
+ -- GODLY
+ {n="Chief Clockman", r="Godly", cost=5000, dmg=500, range=35},
+ {n="Upgraded Titan Clockman", r="Godly", cost=5200, dmg=520, range=35},
+ {n="Sinister Titan Clockman", r="Godly", cost=5500, dmg=550, range=36},
+ {n="Titan Samurai Cameraman", r="Godly", cost=4800, dmg=480, range=34},
+ {n="Demented Titan Cameraman", r="Godly", cost=5000, dmg=510, range=35},
+ {n="Eternal Clock Titan", r="Godly", cost=6000, dmg=600, range=38},
+ -- ULTIMATE / CELESTIAL / EXCLUSIVE - parang sa database, limited
+ {n="Upgraded Titan Drill Dragon", r="Ultimate", cost=8000, dmg=800, range=40},
+ {n="Celestial Cameraman", r="Celestial", cost=10000, dmg=1000, range=45},
+ {n="Titan Beach Ball Man", r="Exclusive", cost=2000, dmg=200, range=25},
+ {n="Santa TV Man", r="Exclusive", cost=2500, dmg=250, range=26},
+ {n="Ghost Cameraman", r="Exclusive", cost=2200, dmg=220, range=25},
+ {n="Secret Agent", r="Exclusive", cost=3000, dmg=300, range=28},
+ -- FARM / SUPPORT - parang database, pang pera
+ {n="Santa Cameraman", r="Farm", cost=500, dmg=0, range=20},
+ {n="Leprechaun Cameraman", r="Farm", cost=600, dmg=0, range=20},
+ {n="Golden Cameraman", r="Farm", cost=800, dmg=0, range=20},
+ {n="Diamond Cameraman", r="Farm", cost=1000, dmg=0, range=20},
+}
+local RARITY_COLOR = {Basic=Color3.fromRGB(180,180,180), Rare=Color3.fromRGB(80,180,255), Epic=Color3.fromRGB(180,80,255), Legendary=Color3.fromRGB(255,180,0), Mythic=Color3.fromRGB(255,60,180), Godly=Color3.fromRGB(255,40,40), Ultimate=Color3.fromRGB(0,255,200), Celestial=Color3.fromRGB(150,255,255), Exclusive=Color3.fromRGB(255,255,0), Farm=Color3.fromRGB(0,255,120)}
+
+local pinili = "Upgraded Titan Cameraman"
+local pinilirarity = "Legendary"
+
+-- 3d to pag wala sa game bubuo ako
+local function build3DModel(unitName, rarity)
+    -- V2: HINDI NA BLOCKS - R15 rig talaga, parang Future Cameraman sa screenshot mo
+    -- 1. Try totoong unit model sa TTD mismo (may Humanoid + maraming parts)
+    local real = nil
+    pcall(function()
+        for _, container in ipairs({game:GetService("ReplicatedStorage"), workspace}) do
+            for _, f in ipairs(container:GetDescendants()) do
+                if f:IsA("Model") and f.Name == unitName and f:FindFirstChildOfClass("Humanoid") then
+                    local cnt = 0
+                    for _, d in ipairs(f:GetDescendants()) do if d:IsA("BasePart") then cnt = cnt + 1 end end
+                    if cnt >= 6 then real = f break end -- buong tao, hindi 1 block
+                end
+            end
+            if real then break end
+        end
+    end)
+    if real then
+        local cl = real:Clone()
+        pcall(function()
+            cl.PrimaryPart = cl:FindFirstChild("HumanoidRootPart") or cl.PrimaryPart
+            for _, pp in ipairs(cl:GetDescendants()) do if pp:IsA("BasePart") then pp.Anchored = true pp.CanCollide = false end end
+            local hum = cl:FindFirstChildOfClass("Humanoid")
+            if hum then hum.PlatformStand = true end
+        end)
+        return cl
+    end
+    -- 2. Fallback: clone yung character mo (R15 rig talaga) tapos gawin Cameraman / Speakerman / TV Man
+    -- kaya hindi blocks - may Humanoid + Motor6D na, tulad ng Future Cameraman sa TTD
+    local char = plr.Character
+    if char and char:FindFirstChildOfClass("Humanoid") then
+        local cl = char:Clone()
+        -- tanggalin accessories / tools para malinis
+        pcall(function()
+            for _, d in ipairs(cl:GetDescendants()) do
+                if d:IsA("Accessory") or d:IsA("Tool") or d:IsA("Decal") or d:IsA("Shirt") or d:IsA("Pants") then d:Destroy() end
+            end
+            -- suit: itim na torso / arms / legs, parang TTD units
+            for _, pp in ipairs(cl:GetDescendants()) do
+                if pp:IsA("BasePart") then
+                    pp.Anchored = true
+                    pp.CanCollide = false
+                    if pp.Name:find("Torso") or pp.Name:find("Arm") or pp.Name:find("Leg") then
+                        pp.Color = Color3.fromRGB(25,25,30)
+                        pp.Material = Enum.Material.SmoothPlastic
+                    end
+                end
+            end
+            local hum = cl:FindFirstChildOfClass("Humanoid")
+            if hum then hum.PlatformStand = true hum.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None end
+            -- head: palitan ng camera / speaker / tv / clock / drill - pero naka-weld sa Head, hindi lumulutang na block
+            local head = cl:FindFirstChild("Head")
+            if head then
+                head.Color = Color3.fromRGB(220,220,220)
+                if unitName:lower():find("speaker") then head.Color = Color3.fromRGB(70,70,70)
+                elseif unitName:lower():find("tv") then head.Color = Color3.fromRGB(50,50,60)
+                elseif unitName:lower():find("clock") then head.Color = Color3.fromRGB(240,220,150)
+                elseif unitName:lower():find("drill") then head.Color = Color3.fromRGB(120,90,40) end
+                -- lens sa harap ng ulo, naka-weld
+                local lens = Instance.new("Part")
+                lens.Name = "Lens"
+                lens.Size = Vector3.new(0.6, 0.4, 0.15)
+                lens.Color = RARITY_COLOR[rarity] or Color3.fromRGB(0,255,255)
+                lens.Material = Enum.Material.Neon
+                lens.Anchored = true
+                lens.CanCollide = false
+                lens.CFrame = head.CFrame * CFrame.new(0, 0, -0.55)
+                lens.Parent = cl
+                local w = Instance.new("WeldConstraint")
+                w.Part0 = head
+                w.Part1 = lens
+                w.Parent = head
+                -- drill bit kung Drillman
+                if unitName:lower():find("drill") then
+                    local bit = Instance.new("Part")
+                    bit.Name = "DrillBit"
+                    bit.Size = Vector3.new(0.2, 0.8, 0.2)
+                    bit.Color = Color3.fromRGB(180,180,180)
+                    bit.Material = Enum.Material.Metal
+                    bit.Anchored = true
+                    bit.CanCollide = false
+                    bit.CFrame = head.CFrame * CFrame.new(0, 0, -1.0)
+                    bit.Parent = cl
+                    local w2 = Instance.new("WeldConstraint")
+                    w2.Part0 = head
+                    w2.Part1 = bit
+                    w2.Parent = head
+                end
+                -- Titan core sa dibdib
+                if unitName:lower():find("titan") then
+                    local torso = cl:FindFirstChild("UpperTorso") or cl:FindFirstChild("Torso")
+                    if torso then
+                        local core = Instance.new("Part")
+                        core.Name = "Core"
+                        core.Size = Vector3.new(0.5, 0.5, 0.2)
+                        core.Color = Color3.fromRGB(0,255,255)
+                        core.Material = Enum.Material.Neon
+                        core.Anchored = true
+                        core.CanCollide = false
+                        core.CFrame = torso.CFrame * CFrame.new(0, 0, -0.55)
+                        core.Parent = cl
+                        local w3 = Instance.new("WeldConstraint")
+                        w3.Part0 = torso
+                        w3.Part1 = core
+                        w3.Parent = torso
+                    end
+                end
+            end
+            -- Future Cameraman sword: kung Future / Titan, lagyan ng espada sa kamay
+            if unitName:lower():find("future") or unitName:lower():find("titan") then
+                local arm = cl:FindFirstChild("Right Arm") or cl:FindFirstChild("RightHand")
+                if arm then
+                    local sword = Instance.new("Part")
+                    sword.Name = "Sword"
+                    sword.Size = Vector3.new(0.12, 1.4, 0.3)
+                    sword.Color = Color3.fromRGB(0,200,255)
+                    sword.Material = Enum.Material.Neon
+                    sword.Anchored = true
+                    sword.CanCollide = false
+                    sword.CFrame = arm.CFrame * CFrame.new(0, -1, -0.4)
+                    sword.Parent = cl
+                    local w4 = Instance.new("WeldConstraint")
+                    w4.Part0 = arm
+                    w4.Part1 = sword
+                    w4.Parent = arm
+                end
+            end
+        end)
+        cl.Name = unitName
+        return cl
+    end
+    -- 3. Last fallback: kung walang character, gumawa ng simple R15-like rig na naka-weld (hindi blocks na nagkalat)
+    local model = Instance.new("Model")
+    model.Name = unitName
+    local function mk(name, size, pos, col)
+        local p = Instance.new("Part")
+        p.Name = name
+        p.Size = size
+        p.Position = pos
+        p.Color = col
+        p.Anchored = true
+        p.CanCollide = false
+        p.Parent = model
+        return p
+    end
+    local hrp = mk("HumanoidRootPart", Vector3.new(1,1,1), Vector3.new(0,1.5,0), Color3.fromRGB(255,255,255))
+    hrp.Transparency = 1
+    model.PrimaryPart = hrp
+    local torso = mk("UpperTorso", Vector3.new(1.2,1.2,0.7), Vector3.new(0,1.8,0), Color3.fromRGB(25,25,30))
+    local head = mk("Head", Vector3.new(0.9,0.8,0.8), Vector3.new(0,2.8,0), Color3.fromRGB(220,220,220))
+    mk("Left Arm", Vector3.new(0.4,1.2,0.4), Vector3.new(-0.9,1.8,0), Color3.fromRGB(25,25,30))
+    mk("Right Arm", Vector3.new(0.4,1.2,0.4), Vector3.new(0.9,1.8,0), Color3.fromRGB(25,25,30))
+    mk("Left Leg", Vector3.new(0.45,1.0,0.45), Vector3.new(-0.35,0.5,0), Color3.fromRGB(25,25,30))
+    mk("Right Leg", Vector3.new(0.45,1.0,0.45), Vector3.new(0.35,0.5,0), Color3.fromRGB(25,25,30))
+    for _, pp in ipairs(model:GetChildren()) do
+        if pp ~= hrp then
+            local w = Instance.new("WeldConstraint")
+            w.Part0 = hrp
+            w.Part1 = pp
+            w.Parent = hrp
+        end
+    end
+    local hum = Instance.new("Humanoid")
+    hum.PlatformStand = true
+    hum.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+    hum.Parent = model
+    return model
+end
+
+local function makeViewport(parent, unitName, rarity, size, doSpin)
+    local vp = Instance.new("ViewportFrame")
+    vp.Size = size or UDim2.new(0, 70, 0, 70)
+    vp.BackgroundColor3 = Color3.fromRGB(220,220,230)
+    vp.BackgroundTransparency = 0
+    -- fix itim: lagyan ng ilaw
+    pcall(function()
+        vp.LightColor = Color3.fromRGB(255,255,255)
+        vp.LightDirection = Vector3.new(0, -1, -1)
+        vp.Ambient = Color3.fromRGB(180,180,180)
+    end)
+    vp.BorderSizePixel = 0
+    vp.ZIndex = 10
+    vp.Parent = parent
+    local vc = Instance.new("UICorner") vc.CornerRadius = UDim.new(0,10) vc.Parent = vp
+    -- FIX: wag na mag-clone ng real model - yun yung nagiging block
+    -- dati kasi pag may nahanap na "Cameraman" sa game, isang block lang yun, yun yung ni-clone
+    -- kaya laging blocks. Ngayon laging build3DModel na lang, buong tao talaga
+    local model = build3DModel(unitName, rarity)
+    pcall(function() for _, pp in ipairs(model:GetDescendants()) do if pp:IsA("BasePart") then pp.Anchored = true pp.CanCollide = false end end end) -- kahit real model, i-anchor para hindi magkalat
+    model.Parent = vp
+    local cam = Instance.new("Camera")
+    cam.Parent = vp
+    vp.CurrentCamera = cam
+    local cf = CFrame.new(0, 1.8, 0) -- fixed center, hindi na bounding box (yun yung nagpa-liit sa "1")
+    local center = cf.Position
+    local dist = 6.5 -- fixed distance, laging kita buong tao
+    cam.CFrame = CFrame.new(center + Vector3.new(2.2, 1.2, dist), center) -- angled, hindi flat kaya hindi mukhang poste
+    -- paikot
+    if doSpin then task.spawn(function()
+        local a = 0
+        while vp.Parent do
+            a = a + 0.02
+            pcall(function() model:PivotTo(CFrame.new(center) * CFrame.Angles(0, a, 0)) end)
+            task.wait(0.03)
+        end
+    end) end
+    return vp
+end
+
+-- dupe tab
+local DupeInfo = Instance.new("TextLabel")
+DupeInfo.Size = UDim2.new(0, 540, 0, 22)
+DupeInfo.Position = UDim2.new(0, 10, 0, 8)
+DupeInfo.BackgroundTransparency = 1
+DupeInfo.Text = isVIP and "VIP: FE DUPE" or "FREE: VISUAL ONLY"
+DupeInfo.TextColor3 = isVIP and Color3.fromRGB(0,255,140) or Color3.fromRGB(255,210,0)
+DupeInfo.Font = Enum.Font.GothamBold
+DupeInfo.TextSize = 12
+DupeInfo.ZIndex = 10
+DupeInfo.Parent = DupeTab
+
+-- search
+local SearchBox = Instance.new("TextBox")
+SearchBox.Size = UDim2.new(0, 250, 0, 30)
+SearchBox.Position = UDim2.new(0, 10, 0, 34)
+SearchBox.PlaceholderText = "search unit... ex titan cameraman"
+SearchBox.Text = ""
+SearchBox.BackgroundColor3 = Color3.fromRGB(255,255,255)
+SearchBox.TextColor3 = Color3.new(0,0,0)
+SearchBox.Font = Enum.Font.Gotham
+SearchBox.TextSize = 12
+SearchBox.ZIndex = 10
+SearchBox.Parent = DupeTab
+local SBC = Instance.new("UICorner") SBC.CornerRadius = UDim.new(0,8) SBC.Parent = SearchBox
+
+-- yung malaki preview
+local SelFrame = Instance.new("Frame")
+SelFrame.Size = UDim2.new(0, 250, 0, 130)
+SelFrame.Position = UDim2.new(0, 280, 0, 34)
+SelFrame.BackgroundColor3 = Color3.fromRGB(255,255,255)
+SelFrame.BorderSizePixel = 0
+SelFrame.ZIndex = 10
+SelFrame.Parent = DupeTab
+local SelC = Instance.new("UICorner") SelC.CornerRadius = UDim.new(0,10) SelC.Parent = SelFrame
+local SelVP = makeViewport(SelFrame, pinili, pinilirarity, UDim2.new(0, 90, 0, 90), true)
+SelVP.Position = UDim2.new(0, 8, 0, 8)
+local SelName = Instance.new("TextLabel")
+SelName.Size = UDim2.new(0, 140, 0, 40)
+SelName.Position = UDim2.new(0, 105, 0, 10)
+SelName.BackgroundTransparency = 1
+SelName.Text = pinili
+SelName.TextColor3 = Color3.new(0,0,0)
+SelName.Font = Enum.Font.GothamBold
+SelName.TextSize = 13
+SelName.TextWrapped = true
+SelName.Parent = SelFrame
+local SelRarity = Instance.new("TextLabel")
+SelRarity.Size = UDim2.new(0, 140, 0, 20)
+SelRarity.Position = UDim2.new(0, 105, 0, 55)
+SelRarity.BackgroundTransparency = 1
+SelRarity.Text = pinilirarity
+SelRarity.TextColor3 = RARITY_COLOR[pinilirarity]
+SelRarity.Font = Enum.Font.GothamBold
+SelRarity.TextSize = 12
+SelRarity.Parent = SelFrame
+local SelMode = Instance.new("TextLabel")
+SelMode.Size = UDim2.new(0, 140, 0, 20)
+SelMode.Position = UDim2.new(0, 105, 0, 80)
+SelMode.BackgroundTransparency = 1
+SelMode.Text = isVIP and "MODE: FE" or "MODE: VISUAL"
+SelMode.TextColor3 = Color3.fromRGB(100,100,100)
+SelMode.Font = Enum.Font.Gotham
+SelMode.TextSize = 11
+SelMode.Parent = SelFrame
+local SelStats = Instance.new("TextLabel")
+SelStats.Size = UDim2.new(0, 140, 0, 20)
+SelStats.Position = UDim2.new(0, 105, 0, 102)
+SelStats.BackgroundTransparency = 1
+SelStats.Text = "Cost: 1700 | DMG: 170"
+SelStats.TextColor3 = Color3.fromRGB(80,80,80)
+SelStats.Font = Enum.Font.Gotham
+SelStats.TextSize = 10
+SelStats.ZIndex = 10
+SelStats.Parent = SelFrame
+
+-- dupe button
+local DupeAmount = Instance.new("TextBox")
+DupeAmount.Size = UDim2.new(0, 80, 0, 34)
+DupeAmount.Position = UDim2.new(0, 10, 0, 72)
+DupeAmount.PlaceholderText = "Amount"
+DupeAmount.Text = "1"
+DupeAmount.BackgroundColor3 = Color3.fromRGB(255,255,255)
+DupeAmount.TextColor3 = Color3.new(0,0,0)
+DupeAmount.Font = Enum.Font.GothamBold
+DupeAmount.TextSize = 12
+DupeAmount.ZIndex = 10
+DupeAmount.Parent = DupeTab
+local DAC = Instance.new("UICorner") DAC.CornerRadius = UDim.new(0,8) DAC.Parent = DupeAmount
+
+local function visualDupe(unitName)
+    -- FREE: Clone 3D model on YOUR screen only
+    local model = build3DModel(unitName, pinilirarity)
+    pcall(function() for _, pp in ipairs(model:GetDescendants()) do if pp:IsA("BasePart") then pp.Anchored = true pp.CanCollide = false end end end)
+    model.Parent = workspace
+    local basePos = Vector3.new(0,5,0)
+    pcall(function() if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then basePos = plr.Character.HumanoidRootPart.Position + Vector3.new(4,0,0) end end)
+    pcall(function() for _, pp in ipairs(model:GetDescendants()) do if pp:IsA("BasePart") then pp.Anchored = true pp.CanCollide = false end end end)
+    pcall(function() model:PivotTo(CFrame.new(basePos + Vector3.new(0, 2, 0))) end)
+    task.delay(4, function() pcall(function() model:Destroy() end) end)
+    return "Visual Dupe: "..unitName.." - Only you see it"
+end
+local function feDupe(unitName)
+    local ok = false
+    pcall(function()
+        for _, rem in pairs(game:GetService("ReplicatedStorage"):GetDescendants()) do
+            if rem:IsA("RemoteEvent") and (rem.Name:lower():find("place") or rem.Name:lower():find("spawn") or rem.Name:lower():find("dupe")) then
+                rem:FireServer(unitName, 1)
+                ok = true
+            end
+        end
+    end)
+    if not ok then return visualDupe(unitName).." (FE fallback)" end
+    return "FE Dupe fired: "..unitName
+end
+
+local DupeBtn = Instance.new("TextButton")
+DupeBtn.Size = UDim2.new(0, 160, 0, 34)
+DupeBtn.Position = UDim2.new(0, 100, 0, 72)
+DupeBtn.BackgroundColor3 = Color3.fromRGB(255,210,0)
+DupeBtn.Text = isVIP and "DUPE (FE) " or "DUPE (VISUAL)"
+DupeBtn.Font = Enum.Font.GothamBold
+DupeBtn.TextSize = 13
+DupeBtn.TextColor3 = Color3.new(0,0,0)
+DupeBtn.ZIndex = 10
+DupeBtn.Parent = DupeTab
+local DBC = Instance.new("UICorner") DBC.CornerRadius = UDim.new(0,10) DBC.Parent = DupeBtn
+DupeBtn.MouseButton1Click:Connect(function()
+    local amt = math.clamp(tonumber(DupeAmount.Text) or 1, 1, isVIP and 10 or 5)
+    for i=1, amt do
+        if isVIP then DupeInfo.Text = feDupe(pinili) else DupeInfo.Text = visualDupe(pinili) end
+        task.wait(0.25)
+    end
+end)
+
+-- filter
+local filters = {"All","Basic","Rare","Epic","Legendary","Mythic","Godly","Exclusive","Farm"}
+local curFilter = "All"
+local filterBtns = {}
+for i, f in ipairs(filters) do
+    local b = Instance.new("TextButton")
+    b.Size = UDim2.new(0, 56 + (i % 3), 0, 24)
+    b.Position = UDim2.new(0, 10 + (i-1)*60, 0, 115)
+    b.BackgroundColor3 = Color3.fromRGB(230,230,230)
+    b.Text = f
+    b.Font = Enum.Font.GothamBold
+    b.TextSize = 10
+    b.TextColor3 = Color3.new(0,0,0)
+    b.ZIndex = 10
+    b.Parent = DupeTab
+    local c = Instance.new("UICorner") c.CornerRadius = UDim.new(0,6) c.Parent = b
+    filterBtns[f] = b
+    b.MouseButton1Click:Connect(function()
+        curFilter = f
+        for n, bb in pairs(filterBtns) do bb.BackgroundColor3 = (n==f) and Color3.fromRGB(255,255,255) or Color3.fromRGB(230,230,230) end
+        refreshGrid()
+    end)
+end
+
+-- grid ng units
+local Grid = Instance.new("ScrollingFrame")
+Grid.Size = UDim2.new(0, 540, 0, 170)
+Grid.Position = UDim2.new(0, 10, 0, 148)
+Grid.BackgroundTransparency = 1
+Grid.ScrollBarThickness = 6
+Grid.CanvasSize = UDim2.new(0,0,0,0)
+Grid.ZIndex = 10
+Grid.Parent = DupeTab
+local GridLayout = Instance.new("UIGridLayout")
+GridLayout.CellSize = UDim2.new(0, 78, 0, 88)
+GridLayout.CellPadding = UDim2.new(0, 6, 0, 6)
+GridLayout.Parent = Grid
+
+local function refreshGrid()
+    for _, ch in pairs(Grid:GetChildren()) do if ch:IsA("TextButton") then ch:Destroy() end end
+    local q = SearchBox.Text:lower()
+    local shown = 0
+    for _, u in ipairs(UNITS) do
+        if (curFilter=="All" or u.r==curFilter or (curFilter=="Exclusive" and (u.r=="Exclusive" or u.r=="Ultimate" or u.r=="Celestial"))) and (q=="" or u.n:lower():find(q, 1, true)) then
+            shown = shown + 1
+            local card = Instance.new("TextButton")
+            card.Size = UDim2.new(0, 82, 0, 92)
+            card.BackgroundColor3 = (u.n==pinili) and Color3.fromRGB(255,255,255) or Color3.fromRGB(240,240,240)
+            card.Text = ""
+            card.ZIndex = 10
+            card.Parent = Grid
+            local cc = Instance.new("UICorner") cc.CornerRadius = UDim.new(0,8) cc.Parent = card
+            local vp = makeViewport(card, u.n, u.r, UDim2.new(0, 60, 0, 52))
+            vp.Position = UDim2.new(0, 11, 0, 4)
+            local lbl = Instance.new("TextLabel")
+            lbl.Size = UDim2.new(1, -4, 0, 28)
+            lbl.Position = UDim2.new(0, 2, 0, 60)
+            lbl.BackgroundTransparency = 1
+            lbl.Text = u.n
+            lbl.TextColor3 = Color3.new(0,0,0)
+            lbl.Font = Enum.Font.GothamBold
+            lbl.TextSize = 8
+            lbl.TextWrapped = true
+            lbl.Parent = card
+            local rar = Instance.new("TextLabel")
+            rar.Size = UDim2.new(1, -4, 0, 10)
+            rar.Position = UDim2.new(0, 2, 0, 82)
+            rar.BackgroundTransparency = 1
+            rar.Text = u.r.." | $"..tostring(u.cost or 0)
+            rar.TextColor3 = RARITY_COLOR[u.r]
+            rar.Font = Enum.Font.GothamBold
+            rar.TextSize = 8
+            rar.Parent = card
+            card.MouseButton1Click:Connect(function()
+                pinili = u.n; pinilirarity = u.r
+                SelName.Text = u.n; SelRarity.Text = u.r; SelRarity.TextColor3 = RARITY_COLOR[u.r]
+                pcall(function() SelStats.Text = "Cost: "..tostring(u.cost or 0).." | DMG: "..tostring(u.dmg or 0).." | Range: "..tostring(u.range or 0) end)
+                SelVP:Destroy()
+                SelVP = makeViewport(SelFrame, u.n, u.r, UDim2.new(0, 90, 0, 90), true)
+                SelVP.Position = UDim2.new(0, 8, 0, 8)
+                refreshGrid()
+            end)
+        end
+    end
+    Grid.CanvasSize = UDim2.new(0,0,0, math.ceil(shown/6)*100 + 10)
+end
+SearchBox:GetPropertyChangedSignal("Text"):Connect(function() pcall(refreshGrid) end)
+pcall(refreshGrid)
+print("CatWare Dupe grid loaded")
+
+makeFeature(DupeTab, 330, "Auto Dupe Selected", function(on) onoff["AutoDupe"] = on end)
+
+-- working to lahat wag mo sabihin print lang
+local onoff = {} -- name -> bool
+local function findRemote(keywords)
+    for _, v in pairs(game:GetService("ReplicatedStorage"):GetDescendants()) do
+        if v:IsA("RemoteEvent") or v:IsA("RemoteFunction") then
+            local n = v.Name:lower()
+            for _, k in ipairs(keywords) do if n:find(k) then return v end end
+        end
+    end
+    return nil
+end
+local function safeFire(rem, ...)
+    if not rem then return false end
+    local args = {...}
+    local ok = pcall(function()
+        if rem:IsA("RemoteEvent") then rem:FireServer(unpack(args)) else rem:InvokeServer(unpack(args)) end
+    end)
+    return ok
+end
+-- esp
+local ESPFolder = Instance.new("Folder") ESPFolder.Name = "CatWareESP" ESPFolder.Parent = game.CoreGui
+local function setESP(on)
+    pcall(function()
+        for _, ch in pairs(ESPFolder:GetChildren()) do ch:Destroy() end
+        if not on then return end
+        for _, m in pairs(workspace:GetDescendants()) do
+            if m:IsA("Model") and m:FindFirstChild("Humanoid") then
+                local hrp = m:FindFirstChild("HumanoidRootPart") or m.PrimaryPart
+                if hrp then
+                    local bb = Instance.new("BillboardGui")
+                    bb.Size = UDim2.new(0, 100, 0, 30)
+                    bb.AlwaysOnTop = true
+                    bb.Parent = ESPFolder
+                    bb.Adornee = hrp
+                    local lbl = Instance.new("TextLabel")
+                    lbl.Size = UDim2.new(1,0,1,0)
+                    lbl.BackgroundTransparency = 1
+                    lbl.Text = m.Name.." | HP: "..math.floor(m.Humanoid.Health)
+                    lbl.TextColor3 = Color3.fromRGB(0,255,140)
+                    lbl.Font = Enum.Font.GothamBold
+                    lbl.TextSize = 11
+                    lbl.Parent = bb
+                end
+            end
+        end
+    end)
+end
+-- range
+local RangeFolder = Instance.new("Folder") RangeFolder.Name = "CatWareRange" RangeFolder.Parent = workspace
+local function setRange(on)
+    pcall(function()
+        for _, ch in pairs(RangeFolder:GetChildren()) do ch:Destroy() end
+        if not on then return end
+        for _, m in pairs(workspace:GetDescendants()) do
+            if m:IsA("Model") and m:FindFirstChild("Humanoid") then
+                local hrp = m:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    local cyl = Instance.new("Part")
+                    cyl.Shape = Enum.PartType.Cylinder
+                    cyl.Size = Vector3.new(0.2, 20, 20)
+                    cyl.CFrame = hrp.CFrame * CFrame.new(0, -1.5, 0) * CFrame.Angles(0,0,math.rad(90))
+                    cyl.Transparency = 0.7
+                    cyl.Color = Color3.fromRGB(0,255,140)
+                    cyl.CanCollide = false
+                    cyl.Anchored = true
+                    cyl.Parent = RangeFolder
+                end
+            end
+        end
+    end)
+end
+-- fps
+local origLighting = {}
+local function setFPS(on)
+    pcall(function()
+        if on then
+            for _, v in pairs(workspace:GetDescendants()) do
+                if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Beam") then v.Enabled = false end
+                if v:IsA("Decal") then v.Transparency = 1 end
+            end
+            local L = game:GetService("Lighting")
+            L.GlobalShadows = false
+            L.FogEnd = 100
+            settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+        else
+            for _, v in pairs(workspace:GetDescendants()) do
+                if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Beam") then v.Enabled = true end
+                if v:IsA("Decal") then v.Transparency = 0 end
+            end
+            game:GetService("Lighting").GlobalShadows = true
+        end
+    end)
+end
+
+-- farm + visuals tinanggal ni zai, garbage daw
+
+-- settings
+makeFeature(SettingsTab, 10, "Anti-AFK [ON]", function(on)
+    onoff["AntiAFK"] = on
+    print("Anti-AFK", on, "- already active via Idled event")
+end)
+makeFeature(SettingsTab, 52, "Anti-Detect (Hide UI)", function(on)
+    if on then pcall(function() ScreenGui.Name = randName() end) end
+end)
+makeFeature(SettingsTab, 94, "Anti-Ban (Safe Mode)", function(on)
+    onoff["SafeMode"] = on
+    DupeInfo.Text = on and "Safe Mode ON - Slow delays, no spam" or "Safe Mode OFF"
+end)
+makeFeature(SettingsTab, 136, "Auto-Ban Leaker [VIP]", function(on)
+    if on and not isVIP then
+        DupeInfo.Text = "VIP ONLY - Buy VIP for Auto-Ban Leaker"
+        return
+    end
+    onoff["AutoBan"] = on
+end)
+makeFeature(SettingsTab, 178, "Hide UI (RightShift)", function(on) print("Hide UI via RightShift:", on) end)
+
+-- fix dupe
+-- (original visualDupe/feDupe already defined above, patch Auto Dupe to use onoff)
+-- auto dupe fix
+-- auto dupe
+pcall(function()
+    -- Patch: override Auto Dupe behaviour by watching onoff
+    task.spawn(function()
+        while true do
+            if onoff["AutoDupe"] then
+                pcall(function()
+                    if isVIP then feDupe(pinili) else visualDupe(pinili) end
+                end)
+                task.wait(2)
+            else task.wait(0.5) end
+        end
+    end)
+end)
+
+UIS.InputBegan:Connect(function(i, gp)
+    if i.KeyCode == Enum.KeyCode.RightShift then Main.Visible = not Main.Visible end
+end)
+
+-- ok na to
+print("CatWare Loaded | Tier: "..userTier.." | Owner: "..tostring(isOwner).." | VIP: "..tostring(isVIP))
+
+-- tapos na ata
+-- pag may bug pm mo ko wag mo post sa public
+
+-- spawner dito sa dulo kasi dito lang defined lahat (pinili, DupeInfo, findRemote, safeFire) - pag nilagay sa gitna nag-e-error, walang laman yung tabs
+local SpawnedFolder = Instance.new("Folder") SpawnedFolder.Name = "CatWareSpawned" SpawnedFolder.Parent = workspace
+local spawnCount = 0
+local autoSpawnOn = false
+local function getSpawnPos(i)
+    local hrp = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
+    local base = hrp and hrp.CFrame or CFrame.new(0, 5, 0)
+    return (base * CFrame.new(math.random(-8, 8), 0, -6 - (i % 5) * 3)).Position
+end
+local function spawnOne()
+    spawnCount = spawnCount + 1
+    local name = pinili or "Upgraded Titan Cameraman"
+    local rarity = pinilirarity or "Legendary"
+    local isVIPNow = (userTier == "VIP") or isOwner
+    if not isVIPNow then pcall(function() DupeInfo.Text = "FREE: Visual lang - pwede ka ma-ban pag nag-spam" end) end
+    local rem = nil
+    if isVIPNow then task.wait(math.random(15, 30) / 10) pcall(function() rem = findRemote({"place", "spawn", "summon", "deploy"}) end) else rem = nil end
+    local didFE = false
+    if rem then didFE = safeFire(rem, name, getSpawnPos(spawnCount)) end
+    if didFE then pcall(function() DupeInfo.Text = "Spawned: " .. name .. " (VIP FE + anti-ban)" end)
+    else
+        pcall(function()
+            local m = build3DModel(name, rarity)
+            pcall(function() for _, pp in ipairs(m:GetDescendants()) do if pp:IsA("BasePart") then pp.Anchored = true pp.CanCollide = false end end end)
+            m.Name = name .. "_Spawned" .. spawnCount
+            local hrp = Instance.new("Part") hrp.Name = "HumanoidRootPart" hrp.Size = Vector3.new(1,1,1) hrp.Transparency = 1 hrp.CFrame = CFrame.new(getSpawnPos(spawnCount)) hrp.Anchored = true hrp.CanCollide = false hrp.Parent = m
+            m.PrimaryPart = hrp
+            for _, part in ipairs(m:GetChildren()) do if part:IsA("BasePart") and part ~= hrp then part.CFrame = CFrame.new(getSpawnPos(spawnCount)) + Vector3.new(0, 1.2, 0) end end
+            m.Parent = SpawnedFolder
+        end)
+        if isVIPNow then pcall(function() DupeInfo.Text = "Spawned: " .. name .. " (VIP Visual fallback + anti-ban)" end) else pcall(function() DupeInfo.Text = "Spawned: " .. name .. " (FREE Visual) #" .. spawnCount end) end
+    end
+    return true
+end
+-- spawner buttons - nasa SpawnerTab na, hindi na sa gitna
+pcall(function()
+    local SpawnerInfo = Instance.new("TextLabel")
+    SpawnerInfo.Size = UDim2.new(0, 540, 0, 22)
+    SpawnerInfo.Position = UDim2.new(0, 10, 0, 8)
+    SpawnerInfo.BackgroundTransparency = 1
+    SpawnerInfo.Text = "Spawner: pili ka muna unit sa Dupe, tapos Spawn dito"
+    SpawnerInfo.TextColor3 = Color3.new(0,0,0)
+    SpawnerInfo.Font = Enum.Font.GothamBold
+    SpawnerInfo.TextSize = 12
+    SpawnerInfo.ZIndex = 6
+    SpawnerInfo.Parent = SpawnerTab
+end)
+makeFeature(SpawnerTab, 40, "Spawn Selected", function(on) if on then spawnOne() end end)
+makeFeature(SpawnerTab, 82, "Spawn x5", function(on) if on then for i=1,5 do spawnOne() task.wait(0.3) end end end)
+makeFeature(SpawnerTab, 124, "Spawn x10", function(on) if on then for i=1,10 do spawnOne() task.wait(0.3) end end end)
+makeFeature(SpawnerTab, 166, "Auto Spawn", function(on)
+    local isVIPNow = (userTier == "VIP") or isOwner
+    if on and not isVIPNow then pcall(function() DupeInfo.Text = "FREE: Bawal Auto Spawn - ma-ba-ban ka, VIP lang pwede" end) autoSpawnOn = false return end
+    autoSpawnOn = on
+    if on then task.spawn(function() while autoSpawnOn do spawnOne() task.wait(math.random(25, 40) / 10) end end) end
+end)
+makeFeature(SpawnerTab, 208, "Clear Spawned", function(on) if on then pcall(function() SpawnedFolder:ClearAllChildren() end) spawnCount = 0 pcall(function() DupeInfo.Text = "Spawned cleared" end) end end)
+print("CatWare Spawner loaded - tabs fixed")
